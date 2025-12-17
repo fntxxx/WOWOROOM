@@ -128,3 +128,27 @@ productWrap.addEventListener("click", e => {
     }
     return;
 })
+
+const discardCart = (id) => {
+    axios.delete(`${API_URL}/carts/${id}`)
+        .then(response => {
+            cartsInfo = response.data ?? {};
+            renderCarts(cartsInfo);
+            alert("已刪除購物車中的該品項");
+        })
+        .catch(error => {
+            console.error("資料載入錯誤： " + error);
+        })
+}
+
+shoppingCartTbody.addEventListener("click", e => {
+    e.preventDefault();
+    if (e.target.closest(".discardBtn")) {
+        const userChoice = confirm("請確認是否將該品項從購物車刪除");
+        if (!userChoice) return;
+
+        const cartId = e.target.dataset.id;
+        discardCart(cartId);
+    }
+    return;
+})
