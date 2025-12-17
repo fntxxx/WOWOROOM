@@ -90,6 +90,21 @@ orderPageTbody.addEventListener("click", e => {
     return;
 })
 
+const discardAllOrders = () => {
+    axios.delete(`${API_URL}/orders`,
+        {
+            headers: {
+                'Authorization': API_TOKEN
+            }
+        }).then(response => {
+            orders = response.data?.orders ?? [];
+            renderOrders(orders);
+            alert("已清除全部訂單");
+        }).catch(error => {
+            console.error("資料載入錯誤： " + error);
+        })
+};
+
 // C3.js
 let chart = c3.generate({
     bindto: '#chart', // HTML 元素綁定
