@@ -34,3 +34,15 @@ const renderProducts = (products) => {
 
     productWrap.innerHTML = productsHtml;
 };
+
+let cartsInfo = {};
+
+const initCarts = () => {
+    axios.get(`${API_URL}/carts`)
+        .then(response => {
+            cartsInfo = response.data ?? {};
+        })
+        .catch(error => {
+            console.error("資料載入錯誤： " + error);
+        })
+};
