@@ -12,9 +12,53 @@ const initOrders = () => {
             }
         }).then(response => {
             orders = response.data?.orders ?? [];
+            renderOrders(orders);
         }).catch(error => {
             console.error("資料載入錯誤： " + error);
         })
+};
+
+initOrders();
+
+const orderPageTbody = document.querySelector(".orderPage-table tbody");
+
+const renderOrders = (orders) => {
+    const tbodyHtml = orders
+        .map(order => {
+            const user = order.user;
+
+            const productsHtml = order.products
+                .map(product => `<p>${product.title} (${product.quantity})</p>`)
+                .join("");
+
+            const orderTime = new Date(order.createdAt * 1000);
+
+            return `
+                <tr>
+                    <td>${order.id}</td>
+                    <td>
+                        <p>${user.name}</p>
+                        <p>${user.tel}</p>
+                    </td>
+                    <td>${user.address}</td>
+                    <td>${user.email}</td>
+                    <td class="order-products">
+                        ${productsHtml}
+                    </td>
+                    <td>${orderTime.toLocaleDateString("zh-TW")}</td>
+                    <td class="orderStatus">
+                        <a href="#" data-id="${order.id}">${order.paid ? "已處理" : "未處理"}</a>
+                    </td>
+                    <td>
+                        <input type="button" class="delSingleOrder-Btn" value="刪除" data-id="${order.id}">
+                    </td>
+                </tr>
+            `;
+        }).join("");
+
+    orderPageTbody.innerHTML = tbodyHtml
+        ? tbodyHtml
+        : "<tr><td colspan='8'>無訂單資料</td></tr>";
 };
 
 // C3.js
