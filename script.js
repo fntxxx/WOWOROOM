@@ -116,3 +116,15 @@ const addToCart = (id) => {
         console.error("資料載入錯誤： " + error);
     })
 }
+
+productWrap.addEventListener("click", e => {
+    e.preventDefault();
+    if (e.target.className === "addCartBtn") {
+        const userChoice = confirm("請確認是否將該品項加入購物車");
+        if (!userChoice) return;
+
+        const productId = e.target.dataset.id;
+        addToCart(productId);
+    }
+    return;
+})
