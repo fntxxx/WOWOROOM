@@ -188,6 +188,16 @@ const renderProductsChart = (orders) => {
     const pieColumns = Object.entries(productCountMap);
     pieColumns.sort((a, b) => b[1] - a[1]);
 
+    if (pieColumns.length > 3) {
+        const other = pieColumns.splice(3);
+        const otherTotal = other.reduce((total, item) => {
+            total[1] += item[1];
+            return total;
+        }, ["其他", 0])
+        pieColumns.push(otherTotal);
+        pieColumns.sort((a, b) => b[1] - a[1]);
+    }
+
     chart = c3.generate({
         bindto: '#chart',
         data: {
