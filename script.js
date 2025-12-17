@@ -152,3 +152,31 @@ shoppingCartTbody.addEventListener("click", e => {
     }
     return;
 })
+
+const discardAllCart = () => {
+    axios.delete(`${API_URL}/carts`)
+        .then(response => {
+            cartsInfo = response.data ?? {};
+            renderCarts(cartsInfo);
+            alert("已刪除購物車中的所有品項");
+        })
+        .catch(error => {
+            console.error("資料載入錯誤： " + error);
+        })
+};
+
+shoppingCartTfoot.addEventListener("click", e => {
+    e.preventDefault();
+    if (e.target.className === "discardAllBtn") {
+        if (cartsInfo.carts?.length === 0) {
+            alert("您的購物車已經沒有商品了")
+            return;
+        }
+
+        const userChoice = confirm("請確認是否將所有品項從購物車刪除");
+        if (!userChoice) return;
+
+        discardAllCart();
+    }
+    return;
+})
