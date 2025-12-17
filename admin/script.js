@@ -76,6 +76,28 @@ const delSingleOrder = (id) => {
         })
 }
 
+const changeOrderStatus = (id) => {
+    const [choiceOrder] = orders.filter(order => order.id === id);
+    axios.put(`${API_URL}/orders`,
+        {
+            "data": {
+                "id": id,
+                "paid": !choiceOrder.paid
+            }
+        },
+        {
+            headers: {
+                'Authorization': API_TOKEN
+            }
+        }).then(response => {
+            orders = response.data?.orders ?? [];
+            renderOrders(orders);
+            alert("已更改該筆訂單狀態");
+        }).catch(error => {
+            console.error("資料載入錯誤： " + error);
+        })
+};
+
 orderPageTbody.addEventListener("click", e => {
     e.preventDefault();
     if (e.target.className === "delSingleOrder-Btn") {
@@ -84,6 +106,15 @@ orderPageTbody.addEventListener("click", e => {
 
         const orderId = e.target.dataset.id;
         delSingleOrder(orderId);
+        return;
+    }
+
+    if (e.target.closest(".orderStatus")) {
+        const userChoice = confirm("請確認是否更改該筆訂單狀態");
+        if (!userChoice) return;
+
+        const orderId = e.target.dataset.id;
+        changeOrderStatus(orderId);
         return;
     }
 
