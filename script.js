@@ -35,6 +35,19 @@ const renderProducts = (products) => {
     productWrap.innerHTML = productsHtml;
 };
 
+const productSelect = document.querySelector(".productSelect");
+
+productSelect.addEventListener("change", () => {
+    const selectedCategory = productSelect.value;
+
+    const filtered =
+        selectedCategory === "全部"
+            ? products
+            : products.filter(product => product.category === selectedCategory);
+
+    renderProducts(filtered);
+})
+
 let cartsInfo = {};
 
 const initCarts = () => {
