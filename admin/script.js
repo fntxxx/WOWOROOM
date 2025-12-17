@@ -13,6 +13,7 @@ const initOrders = () => {
         }).then(response => {
             orders = response.data?.orders ?? [];
             renderOrders(orders);
+            renderProductsChart(orders);
         }).catch(error => {
             console.error("資料載入錯誤： " + error);
         })
@@ -70,6 +71,7 @@ const delSingleOrder = (id) => {
         }).then(response => {
             orders = response.data?.orders ?? [];
             renderOrders(orders);
+            renderProductsChart(orders);
             alert("已刪除該筆訂單");
         }).catch(error => {
             console.error("資料載入錯誤： " + error);
@@ -130,6 +132,7 @@ const discardAllOrders = () => {
         }).then(response => {
             orders = response.data?.orders ?? [];
             renderOrders(orders);
+            renderProductsChart(orders);
             alert("已清除全部訂單");
         }).catch(error => {
             console.error("資料載入錯誤： " + error);
@@ -152,22 +155,37 @@ discardAllBtn.addEventListener("click", e => {
     discardAllOrders();
 })
 
-// C3.js
-let chart = c3.generate({
-    bindto: '#chart', // HTML 元素綁定
-    data: {
-        type: "pie",
-        columns: [
-            ['Louvre 雙人床架', 1],
-            ['Antony 雙人床架', 2],
-            ['Anty 雙人床架', 3],
-            ['其他', 4],
-        ],
-        colors: {
-            "Louvre 雙人床架": "#DACBFF",
-            "Antony 雙人床架": "#9D7FEA",
-            "Anty 雙人床架": "#5434A7",
-            "其他": "#301E5F",
+const renderProductsChart = (orders) => {
+    const productCountMap = orders.reduce((map, order) => {
+        order.products.forEach(product => {
+            map[product.title] =
+                (map[product.title] || 0)
+                + product.quantity * product.price;
+        });
+        return map;
+    }, {});
+
+    const pieColumns = Object.entries(productCountMap);
+    pieColumns.sort((a, b) => b[1] - a[1]);
+
+    if (pieColumns.length > 3) {
+        const other = pieColumns.splice(3);
+        const otherTotal = other.reduce((total, item) => {
+            total[1] += item[1];
+            return total;
+        }, ["其他", 0])
+        pieColumns.push(otherTotal);
+        pieColumns.sort((a, b) => b[1] - a[1]);
+    }
+
+    chart = c3.generate({
+        bindto: '#chart',
+        data: {
+            type: "pie",
+            columns: pieColumns
+        },
+        color: {
+            pattern: ['#301E5F', '#5434A7', '#9D7FEA', '#DACBFF']
         }
-    },
-});
+    })
+};
