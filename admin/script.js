@@ -105,6 +105,22 @@ const discardAllOrders = () => {
         })
 };
 
+const discardAllBtn = document.querySelector(".discardAllBtn");
+
+discardAllBtn.addEventListener("click", e => {
+    e.preventDefault();
+
+    if (orders.length === 0) {
+        alert("已經沒有訂單了")
+        return;
+    }
+
+    const userChoice = confirm("請確認是否清除全部訂單");
+    if (!userChoice) return;
+
+    discardAllOrders();
+})
+
 // C3.js
 let chart = c3.generate({
     bindto: '#chart', // HTML 元素綁定
