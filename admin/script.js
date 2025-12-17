@@ -109,6 +109,15 @@ orderPageTbody.addEventListener("click", e => {
         return;
     }
 
+    if (e.target.closest(".orderStatus")) {
+        const userChoice = confirm("請確認是否更改該筆訂單狀態");
+        if (!userChoice) return;
+
+        const orderId = e.target.dataset.id;
+        changeOrderStatus(orderId);
+        return;
+    }
+
     return;
 })
 
