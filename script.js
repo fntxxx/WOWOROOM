@@ -152,3 +152,15 @@ shoppingCartTbody.addEventListener("click", e => {
     }
     return;
 })
+
+const discardAllCart = () => {
+    axios.delete(`${API_URL}/carts`)
+        .then(response => {
+            cartsInfo = response.data ?? {};
+            renderCarts(cartsInfo);
+            alert("已刪除購物車中的所有品項");
+        })
+        .catch(error => {
+            console.error("資料載入錯誤： " + error);
+        })
+};
