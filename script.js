@@ -119,7 +119,7 @@ const addToCart = (id) => {
 
 productWrap.addEventListener("click", e => {
     e.preventDefault();
-    if (e.target.className === "addCartBtn") {
+    if (e.target.classList.contains("addCartBtn")) {
         const userChoice = confirm("請確認是否將該品項加入購物車");
         if (!userChoice) return;
 
@@ -143,7 +143,7 @@ const discardCart = (id) => {
 
 shoppingCartTbody.addEventListener("click", e => {
     e.preventDefault();
-    if (e.target.closest(".discardBtn")) {
+    if (e.target.parentElement.classList.contains("discardBtn")) {
         const userChoice = confirm("請確認是否將該品項從購物車刪除");
         if (!userChoice) return;
 
@@ -167,7 +167,7 @@ const discardAllCart = () => {
 
 shoppingCartTfoot.addEventListener("click", e => {
     e.preventDefault();
-    if (e.target.className === "discardAllBtn") {
+    if (e.target.classList.contains("discardAllBtn")) {
         if (cartsInfo.carts?.length === 0) {
             alert("您的購物車已經沒有商品了")
             return;
