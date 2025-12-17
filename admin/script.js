@@ -76,6 +76,20 @@ const delSingleOrder = (id) => {
         })
 }
 
+orderPageTbody.addEventListener("click", e => {
+    e.preventDefault();
+    if (e.target.className === "delSingleOrder-Btn") {
+        const userChoice = confirm("請確認是否刪除該筆訂單");
+        if (!userChoice) return;
+
+        const orderId = e.target.dataset.id;
+        delSingleOrder(orderId);
+        return;
+    }
+
+    return;
+})
+
 // C3.js
 let chart = c3.generate({
     bindto: '#chart', // HTML 元素綁定
