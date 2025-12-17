@@ -97,3 +97,34 @@ const renderCarts = (cartsInfo) => {
         : "<tr><td colspan='5' align='center'>無商品資料</td></tr>";
     finalTotalSpan.textContent = `NT$${finalTotal.toLocaleString("zh-TW")}`;
 };
+
+const addToCart = (id) => {
+    const [choiceProduct] = cartsInfo.carts.filter(cart => cart.product?.id === id);
+    const quantity = (choiceProduct?.quantity || 0) + 1;
+    axios.post(`${API_URL}/carts`, {
+        "data": {
+            "productId": id,
+            "quantity": quantity
+        }
+    }).then(response => {
+        cartsInfo = response.data ?? {};
+        renderCarts(cartsInfo);
+        quantity > 1
+            ? alert("已將購物車中的該品項數量加一")
+            : alert("已將該品項加入購物車");
+    }).catch(error => {
+        console.error("資料載入錯誤： " + error);
+    })
+}
+
+productWrap.addEventListener("click", e => {
+    e.preventDefault();
+    if (e.target.className === "addCartBtn") {
+        const userChoice = confirm("請確認是否將該品項加入購物車");
+        if (!userChoice) return;
+
+        const productId = e.target.dataset.id;
+        addToCart(productId);
+    }
+    return;
+})
