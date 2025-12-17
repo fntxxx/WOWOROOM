@@ -180,3 +180,17 @@ shoppingCartTfoot.addEventListener("click", e => {
     }
     return;
 })
+
+const submitOrder = (user) => {
+    axios.post(`${API_URL}/orders`,
+        {
+            "data": {
+                "user": user
+            }
+        }).then(response => {
+            initCarts();
+            alert("已送出預訂資料");
+        }).catch(error => {
+            console.error("資料載入錯誤： " + error);
+        })
+};
