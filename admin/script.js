@@ -1,3 +1,7 @@
+const API_PATH = "shanglun";
+const API_URL = `https://livejs-api.hexschool.io/api/livejs/v1/admin/${API_PATH}`;
+const API_TOKEN = "qEsZdrWijvf5d3ek8PH9uOPS9yU2";
+
 // C3.js
 let chart = c3.generate({
     bindto: '#chart', // HTML 元素綁定
