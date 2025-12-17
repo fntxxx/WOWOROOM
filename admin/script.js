@@ -102,7 +102,7 @@ const changeOrderStatus = (id) => {
 
 orderPageTbody.addEventListener("click", e => {
     e.preventDefault();
-    if (e.target.className === "delSingleOrder-Btn") {
+    if (e.target.classList.contains("delSingleOrder-Btn")) {
         const userChoice = confirm("請確認是否刪除該筆訂單");
         if (!userChoice) return;
 
@@ -111,7 +111,7 @@ orderPageTbody.addEventListener("click", e => {
         return;
     }
 
-    if (e.target.closest(".orderStatus")) {
+    if (e.target.parentElement.classList.contains("orderStatus")) {
         const userChoice = confirm("請確認是否更改該筆訂單狀態");
         if (!userChoice) return;
 
