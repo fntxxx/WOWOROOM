@@ -140,3 +140,15 @@ const discardCart = (id) => {
             console.error("資料載入錯誤： " + error);
         })
 }
+
+shoppingCartTbody.addEventListener("click", e => {
+    e.preventDefault();
+    if (e.target.closest(".discardBtn")) {
+        const userChoice = confirm("請確認是否將該品項從購物車刪除");
+        if (!userChoice) return;
+
+        const cartId = e.target.dataset.id;
+        discardCart(cartId);
+    }
+    return;
+})
