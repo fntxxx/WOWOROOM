@@ -2,6 +2,21 @@ const API_PATH = "shanglun";
 const API_URL = `https://livejs-api.hexschool.io/api/livejs/v1/admin/${API_PATH}`;
 const API_TOKEN = "qEsZdrWijvf5d3ek8PH9uOPS9yU2";
 
+let orders = [];
+
+const initOrders = () => {
+    axios.get(`${API_URL}/orders`,
+        {
+            headers: {
+                'Authorization': API_TOKEN
+            }
+        }).then(response => {
+            orders = response.data?.orders ?? [];
+        }).catch(error => {
+            console.error("資料載入錯誤： " + error);
+        })
+};
+
 // C3.js
 let chart = c3.generate({
     bindto: '#chart', // HTML 元素綁定
