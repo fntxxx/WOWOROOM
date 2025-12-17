@@ -876,6 +876,10 @@ body {
     border: 1px solid #000000;
 }
 
+.orderPage-table .order-products p:not(:last-of-type) {
+    border-bottom: 1px solid #555;
+}
+
 @media (max-width: 1110px) {
     .orderPage-table {
         width: 1100px;
