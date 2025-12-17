@@ -180,3 +180,47 @@ shoppingCartTfoot.addEventListener("click", e => {
     }
     return;
 })
+
+const submitOrder = (user) => {
+    axios.post(`${API_URL}/orders`,
+        {
+            "data": {
+                "user": user
+            }
+        }).then(response => {
+            initCarts();
+            alert("已送出預訂資料");
+        }).catch(error => {
+            console.error("資料載入錯誤： " + error);
+        })
+};
+
+const orderInfoForm = document.querySelector(".orderInfo-form");
+
+orderInfoForm.addEventListener("submit", e => {
+    e.preventDefault();
+
+    if (cartsInfo.carts?.length === 0) {
+        alert("您的購物車是空的，請將預訂品項加入購物車")
+        return;
+    }
+
+    const user = {
+        "name": orderInfoForm["姓名"].value.trim(),
+        "tel": orderInfoForm["電話"].value,
+        "email": orderInfoForm["Email"].value,
+        "address": orderInfoForm["寄送地址"].value.trim(),
+        "payment": orderInfoForm["交易方式"].value
+    };
+
+    if (!user.name || !user.tel || !user.email || !user.address) {
+        alert("預訂資料請勿留白");
+        return;
+    }
+
+    const userChoice = confirm("請確認是否送出預訂資料");
+    if (!userChoice) return;
+
+    submitOrder(user);
+    orderInfoForm.reset();
+})
