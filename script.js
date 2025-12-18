@@ -81,7 +81,9 @@ const renderCarts = (cartsInfo) => {
                         </div>
                     </td>
                     <td>NT$${product.price.toLocaleString("zh-TW")}</td>
-                    <td>${cart.quantity}</td>
+                    <td>
+                        <input type="number" id="product-quantity" min="1" max="99" value="${cart.quantity}">
+                    </td>
                     <td>NT$${(product.price * cart.quantity).toLocaleString("zh-TW")}</td>
                     <td class="discardBtn">
                         <a href="#" class="material-icons" data-id="${cart.id}">
