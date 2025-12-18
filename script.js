@@ -81,7 +81,9 @@ const renderCarts = (cartsInfo) => {
                         </div>
                     </td>
                     <td>NT$${product.price.toLocaleString("zh-TW")}</td>
-                    <td>${cart.quantity}</td>
+                    <td>
+                        <input type="number" class="quantity-input" min="1" max="99" value="${cart.quantity}" data-id="${cart.id}">
+                    </td>
                     <td>NT$${(product.price * cart.quantity).toLocaleString("zh-TW")}</td>
                     <td class="discardBtn">
                         <a href="#" class="material-icons" data-id="${cart.id}">
@@ -125,6 +127,38 @@ productWrap.addEventListener("click", e => {
 
         const productId = e.target.dataset.id;
         addToCart(productId);
+    }
+    return;
+})
+
+const editQuantityInCart = (id, quantity) => {
+    axios.patch(`${API_URL}/carts`, {
+        "data": {
+            "id": id,
+            "quantity": quantity
+        }
+    }).then(response => {
+        cartsInfo = response.data ?? {};
+        renderCarts(cartsInfo);
+    }).catch(error => {
+        console.error("資料載入錯誤： " + error);
+    })
+}
+
+shoppingCartTbody.addEventListener("change", e => {
+    e.preventDefault();
+    if (e.target.classList.contains("quantity-input")) {
+        const cartId = e.target.dataset.id;
+        const [choiceCart] = cartsInfo.carts.filter(cart => cart.id === cartId);
+        const originalQuantity = choiceCart?.quantity;
+
+        if (e.target.value < 1 || e.target.value > 99) {
+            e.target.value = originalQuantity;
+            return;
+        }
+
+        const editQuantity = Number(e.target.value);
+        editQuantityInCart(cartId, editQuantity);
     }
     return;
 })
