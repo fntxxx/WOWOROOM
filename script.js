@@ -131,6 +131,20 @@ productWrap.addEventListener("click", e => {
     return;
 })
 
+const editQuantityInCart = (id, quantity) => {
+    axios.patch(`${API_URL}/carts`, {
+        "data": {
+            "id": id,
+            "quantity": quantity
+        }
+    }).then(response => {
+        cartsInfo = response.data ?? {};
+        renderCarts(cartsInfo);
+    }).catch(error => {
+        console.error("資料載入錯誤： " + error);
+    })
+}
+
 const discardCart = (id) => {
     axios.delete(`${API_URL}/carts/${id}`)
         .then(response => {
