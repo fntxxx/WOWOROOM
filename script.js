@@ -82,7 +82,7 @@ const renderCarts = (cartsInfo) => {
                     </td>
                     <td>NT$${product.price.toLocaleString("zh-TW")}</td>
                     <td>
-                        <input type="number" id="product-quantity" min="1" max="99" value="${cart.quantity}">
+                        <input type="number" class="quantity-input" min="1" max="99" value="${cart.quantity}" data-id="${cart.id}">
                     </td>
                     <td>NT$${(product.price * cart.quantity).toLocaleString("zh-TW")}</td>
                     <td class="discardBtn">
@@ -144,6 +144,24 @@ const editQuantityInCart = (id, quantity) => {
         console.error("資料載入錯誤： " + error);
     })
 }
+
+shoppingCartTbody.addEventListener("change", e => {
+    e.preventDefault();
+    if (e.target.classList.contains("quantity-input")) {
+        const cartId = e.target.dataset.id;
+        const [choiceCart] = cartsInfo.carts.filter(cart => cart.id === cartId);
+        const originalQuantity = choiceCart?.quantity;
+
+        if (e.target.value < 1 || e.target.value > 99) {
+            e.target.value = originalQuantity;
+            return;
+        }
+
+        const editQuantity = Number(e.target.value);
+        editQuantityInCart(cartId, editQuantity);
+    }
+    return;
+})
 
 const discardCart = (id) => {
     axios.delete(`${API_URL}/carts/${id}`)
